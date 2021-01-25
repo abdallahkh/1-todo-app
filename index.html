@@ -4,19 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Todo Modo</title>
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>Modo</title>
 </head>
 <body>
-    <h1 class="titre"> TO<span class="related">DO</span> MO<span class="related">DO</span></h1>
-    <input type="text" placeholder="add a todo item" id="add-item">
-    <button class="action-on">ADD</button><br>
+    <!--title -->
+    <h1 class="titre"></span> MO<span class="related">DO</span></h1>
+    <!--end title--> 
+<div id="app">
+    <input type="text" placeholder="add a todo item" id="add-item" v-model="taskInput">
+    <button class="action-on" @click="addItem">ADD</button><br>
     <div id="todos-box">
-        <h2 class="titre" onclick="dosomething(this)">here is the todos box</h2>
-        <button id="remove">Remove Finished Tasks </button>
+        <h2 class="titre">tasks box</h2>
+        <button id="remove" 
+         @click="removeFinished">Remove Finished Tasks </button>
         <ul id="list">
-
+            <div v-for="task in tasks">
+          <li @click="markFinished(task)" 
+              :class="{ex : task.finished}"
+              >{{task.content}}
+           </li>
+           <input type="text" v-if="task.editingOn" v-model="task.content">
+           <button class="action-on" @click="toggleEditing(task)">Edit</button>
+           <button class="action-on" @click="task.noteShowing=!task.noteShowing">Notes</button>
+         <!-- pop up notes -->
+         <div v-show="task.noteShowing">
+            <div>
+                <h2>take your notes here </h2>
+                
+                <textarea name="Notes" rows="4" cols="50" v-model="task.noteContent">
+                    {{task.noteContent}}
+                    </textarea>
+            </div>
+        </div>
+         <!--end popup-->
         </ul>
+
+        </div>
     </div>
+  </div>
+
     <script src="todo.js"></script>
+
 </body>
 </html>
