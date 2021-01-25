@@ -1,24 +1,39 @@
-/// add an element to todos 
-document.querySelector('.action-on').onclick=()=>{
-    let content = document.getElementById('add-item').value;
-    if (content=="") {
-        alert('you cannot add an empty task')
-    }else{
-    const lis = document.createElement('li');
-    const lisCon = document.createTextNode(content);
-    lis.appendChild(lisCon);
-    const elemen = document.getElementById('list');
-    elemen.appendChild(lis);
-    // mark finishded tasks with line through
-    lis.onclick=()=>{
-        lis.setAttribute('class','ex')
-    };
+const app ={data(){
+	return{
+          taskInput : "",
+          tasks : [],
     }
-    document.getElementById('add-item').value="";
-}
-// remove finished elements from the todo list
-const removing=document.getElementById('remove');
-removing.onclick=()=>{
-    document.querySelectorAll('.ex').forEach(e => e.remove());
 
-};
+    },
+    methods:{
+        addItem(){
+            if(this.taskInput!=""){
+            newTask = {
+                content : this.taskInput,
+                finished : false,
+                editingOn : false,
+                noteShowing: false ,
+                noteContent : ""
+            }
+            this.tasks.push(newTask)
+            this.taskInput=""
+            }
+        },
+        markFinished(item){
+            item.finished =! item.finished
+        } ,
+        removeFinished(){
+           let finished = this.tasks.filter(task => task.finished );
+           finished.forEach(finishedTask => this.tasks.splice(this.tasks
+            .findIndex(e => e.finished === finishedTask.finished),1))
+        },
+        toggleEditing(item){
+            item.editingOn =! item.editingOn ;
+            
+        }
+        
+    }
+}
+
+
+Vue.createApp(app).mount("#app")
